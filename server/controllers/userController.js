@@ -39,6 +39,8 @@ const loginUser = async (req, res) => {
     res.status(400).json({message : 'Invalid Email or Password'})
 }
 };
+
+//logout //
 const logoutUser = async (req, res) => {
   res.cookie('jwt','',{
     httpOnly : true,
@@ -47,11 +49,38 @@ const logoutUser = async (req, res) => {
 
   res.status(200).json({ Message: "User logged out" });
 };
+
+//Get user Details //
 const getUserProfile = async (req, res) => {
-  res.status(200).json({ Message: "welcome to get profile" });
+  const user = {
+    _id : req.user._id,
+    userName : req.user.userName,
+    email : req.user.email,
+  }
+  res.status(200).json(user);
 };
+
+//Update User //
 const updateUserProfile = async (req, res) => {
-  res.status(200).json({ Message: "welcome to update profile" });
+  const existingUser = await User.findById(req.user._id);
+  if(existingUser){
+    existingUser.name = req.body.name;
+    existingUser.email = req.body.email;
+
+    if(req.body.password){
+      existingUser.password = req.body.password;
+    }
+    const updatedUser = await existingUser.save()
+
+    res.status(200).json({
+      _id : updatedUser._id,
+      userName : updatedUser.userName,
+      email : updatedUser.email,
+    });
+  }else{
+    res.status(404).json({message : 'user cannot update'})
+  }
+  // res.status(200).json({ Message: "Welcome to update profile" });
 };
 
 module.exports = { registerUser, loginUser, logoutUser, getUserProfile, updateUserProfile };
