@@ -1,22 +1,31 @@
-import { Navbar , Nav , Container } from "react-bootstrap";
+// Header.jsx
+import React from 'react';
 
-const Header = ()=>{
-    return(
-        <header>
-            <Navbar bg='light' expand='lg' collapseOnSelect>
-                <Container>
-                    <Navbar.Brand href='/'>Mern-Auth</Navbar.Brand>
-                    <Navbar.Toggle />
-                    <Navbar.Collapse id='basic-navbar-nav'>
-                        <Nav>
-                            <Nav.Link href='/login'>Login</Nav.Link>
-                            <Nav.Link href='/register'>Register</Nav.Link>
-                        </Nav>
-                    </Navbar.Collapse>
-                </Container>
-            </Navbar>
-        </header>
-    )
+class Header extends React.Component {
+    render() {
+        return (
+            <header>
+                <nav className="navbar navbar-expand-lg navbar-light bg-light">
+                    <div className="container">
+                        <a className="navbar-brand" href="/">Mern-Auth</a>
+                        <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#basic-navbar-nav" aria-controls="basic-navbar-nav" aria-expanded="false" aria-label="Toggle navigation">
+                            <span className="navbar-toggler-icon"></span>
+                        </button>
+                        <div className="collapse navbar-collapse" id="basic-navbar-nav">
+                            <ul className="navbar-nav ml-auto">
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/login">Login</a>
+                                </li>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="/register">Register</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </nav>
+            </header>
+        );
+    }
 }
 
-export default Header
+export default Header;
