@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { useRegisterMutation } from "../redux/slices/userApiSlice";
-import { setCredentials } from "../redux/slices/authSlice";
+// import { setCredentials } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
-// import Loader from '../components/Loader';
+import { useUpdateMutation } from "../redux/slices/userApiSlice";
 
 
-const Registrationscreen = () => {
+const Profilescreen = () => {
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,14 +14,14 @@ const Registrationscreen = () => {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [register ,{isLoading}] = useRegisterMutation();
-  // const { userInfo } = useSelector((state) => state.auth);
-  // useEffect(() => {
-  //   if(userInfo){
-      
-  //     navigate("/");
-  //   }
-  // }, [navigate, userInfo]);
+  const { userInfo } = useSelector((state) => state.auth);
+  const [update, {isLoading}] = useUpdateMutation();
+
+  useEffect(() => {
+    setUserName(userInfo.userName)
+    setEmail(userInfo.email)
+
+  }, [userInfo.setEmail, userInfo.setUserName]);
 
   const submitHandler = async(e) => {
     e.preventDefault();
@@ -33,11 +32,13 @@ const Registrationscreen = () => {
       toast.error("Password do not match")
     }else{
       try {
-        const res = await register({userName, email, password});
-        dispatch(setCredentials({...res}));
-        toast("User Successfully registered!...");
-        navigate('/login');    
-        console.log("user register");    
+         const res = update({
+            id : userInfo._id,
+            userName,
+            email,
+            password
+        }).unwrap();
+        toast.success("user password updated");    
       } catch (err) {
         toast.error(err?.data?.message)
       }
@@ -48,7 +49,7 @@ const Registrationscreen = () => {
     <div className="py-5">
       <div className="container d-flex justify-content-center">
         <div className="card p-5 d-flex flex-column hero-card bg-light w-50">
-          <h3 className="fw-bold text-center mb-4">REGISTER</h3>
+          <h3 className="fw-bold text-center mb-4">Update Password</h3>
           <form onSubmit={submitHandler}>
             <div className="mb-3">
               <label htmlFor="exampleInputName" className="fw-bold form-label">
@@ -112,12 +113,10 @@ const Registrationscreen = () => {
                 id="exampleInputCPassword"
               />
             </div>
-            <div className=" my-2">
-              already a customer?<Link to="/login"> Login </Link>
-            </div>
+            
             <div className="d-flex justify-content-center my-5">
               <button type="submit" className="btn btn-primary">
-                Register
+                Update
               </button>
             </div>
           </form>
@@ -127,4 +126,4 @@ const Registrationscreen = () => {
   );
 };
 
-export default Registrationscreen;
+export default Profilescreen;
