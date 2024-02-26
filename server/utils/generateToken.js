@@ -1,8 +1,9 @@
 const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
+dotenv.config();
 
-const JWT_SECRET = "ahfjabsclbehif"
 const generateToken = (res , userId) => {
-    const token = jwt.sign({userId}, JWT_SECRET,{expiresIn : '1d'});
+    const token = jwt.sign({userId}, process.env.JWT_SECRET,{expiresIn : '1d'});
 
     res.cookie('jwt' , token , {
         httpOnly : true,
